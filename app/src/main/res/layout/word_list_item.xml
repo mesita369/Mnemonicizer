@@ -8,17 +8,19 @@
 
     >
     <LinearLayout
+
         android:id="@+id/ll"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-
+        android:weightSum="9"
         android:orientation="horizontal"
         >
-    <ImageView android:layout_width="50dp"
-        android:layout_height="50dp"
+    <ImageView android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/image_view_word"/>
     <LinearLayout
         android:layout_marginLeft="5dp"
-        android:layout_width="match_parent"
+        android:layout_weight="6"
+        android:layout_width="0dp"
         android:orientation="vertical"
         android:gravity="center"
         android:layout_height="match_parent">
@@ -37,7 +39,33 @@
             android:textSize="12sp"
             />
     </LinearLayout>
+     <ImageButton
+         android:layout_weight="1"
+         android:layout_width="0dp"
+         android:layout_height="40dp"
+         android:scaleType="centerInside"
 
+         android:background="@null"
+         android:src="@drawable/play"
+         android:id="@+id/play"/>
+        <ImageButton
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:scaleType="centerInside"
+            android:background="@null"
+            android:src="@drawable/mic"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:id="@+id/rec"/>
+        <ImageButton
+            android:src="@drawable/tick_red"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:id="@+id/tick"/>
     </LinearLayout>
     <View
         android:layout_below="@id/ll"

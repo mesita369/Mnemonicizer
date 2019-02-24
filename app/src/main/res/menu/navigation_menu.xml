@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/all_wrds"
+        android:icon="@drawable/all_wrds"
+        android:title="All Words"/>
+    <item android:id="@+id/fav_wrds"
+        android:icon="@drawable/fav"
+        android:title="Favourite Word"/>
+    <item android:id="@+id/my_res"
+        android:icon="@drawable/my_res"
+        android:title="My Results"/>
+    <item android:id="@+id/prv_pol"
+        android:icon="@drawable/privacy"
+        android:title="Privacy Policy"/>
+    <item android:id="@+id/t_c"
+        android:icon="@drawable/setting"
+        android:title="Terms and Conditions"/>
+    <item android:id="@+id/h_f"
+        android:icon="@drawable/feed"
+        android:title="Help and Feedback"/>
+    <item android:id="@+id/abt"
+        android:icon="@drawable/abt"
+        android:title="About"/>
+</menu>

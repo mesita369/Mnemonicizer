@@ -2,12 +2,13 @@ package com.mnemonicizer.mnemonicizer.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.mnemonicizer.mnemonicizer.Model.Word;
 import com.mnemonicizer.mnemonicizer.R;
+import com.mnemonicizer.mnemonicizer.utils.succesCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +25,16 @@ import java.util.List;
 
 
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  implements Filterable{
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  implements Filterable,succesCallback {
 
     private LayoutInflater inflater;
     private Context ctx;
     private List<Word> wordsFiltered,words;
+    private AdapterCallback mAdapterCallback;
     //private List<Word> words = new ArrayList<>();
 
-    public CustomAdapter(Context ctx,List<Word> words) {
-
+    public CustomAdapter(Context ctx,List<Word> words,AdapterCallback callback) {
+        this.mAdapterCallback = callback;
         this.words = words;
         this.wordsFiltered = words;
         Toast.makeText(ctx, "C Called", Toast.LENGTH_SHORT).show();
@@ -50,6 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final CustomAdapter.MyViewHolder holder, final int position) {
+        Log.d("BINDED",""+position);
         final Word wrd = wordsFiltered.get(position);
             holder.word.setText(wrd.getName());
             holder.mng.setText(wrd.getMeaning());
@@ -59,6 +63,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(wordsFiltered.get(position).getName().charAt(0) + "", color1);
             holder.imageView.setImageDrawable(drawable);
+            if(wordsFiltered.get(position).getCmplt_in() == 1){
+                Log.d("BINDED","Called "+position);
+                holder.tick.setImageDrawable(ctx.getResources().getDrawable(R.drawable.tick));
+            }else{
+                Log.d("BINDED","Called---- "+position);
+                holder.tick.setImageDrawable(ctx.getResources().getDrawable(R.drawable.tick_red));
+            }
+
 
         //holder.tvnumber.setText(String.valueOf(MainActivity.words.get(position).getNumber()));
 
@@ -69,19 +81,35 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return wordsFiltered.size();
     }
 
+    @Override
+    public void recSucces(View v) {
+
+
+
+       // notifyDataSetChanged();
+    }
+
+    public void setItems(List<Word> v) {
+        this.wordsFiltered = v;
+        notifyDataSetChanged();
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        protected Button btn_plus, btn_minus;
+        protected ImageButton play,rec, tick;
         private TextView word, mng;
         private ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-
+            play = itemView.findViewById(R.id.play);
+            rec = itemView.findViewById(R.id.rec);
+            tick = itemView.findViewById(R.id.tick);
             word = (TextView) itemView.findViewById(R.id.word);
             mng = (TextView) itemView.findViewById(R.id.mng);
             imageView = itemView.findViewById(R.id.image_view_word);
-
+             play.setOnClickListener(this);
+             rec.setOnClickListener(this);
 
 
         }
@@ -90,21 +118,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         @Override
         public void onClick(View v) {
 
-            if (v.getId() == btn_plus.getId()){
+            if (v.getId() == play.getId()){
+                mAdapterCallback.onPlayCallback(wordsFiltered.get(getAdapterPosition()).getName());
+                Toast.makeText(ctx, "PLAY "+wordsFiltered.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
 
-                View tempview = (View) btn_plus.getTag(R.integer.btn_plus_view);
-                TextView tv = (TextView) tempview.findViewById(R.id.number);
-                int number = Integer.parseInt(tv.getText().toString()) + 1;
-                tv.setText(String.valueOf(number));
-                words.get(getAdapterPosition()).setName(number+"");
-
-            } else if(v.getId() == btn_minus.getId()) {
-
-                View tempview = (View) btn_minus.getTag(R.integer.btn_minus_view);
-                TextView tv = (TextView) tempview.findViewById(R.id.number);
-                int number = Integer.parseInt(tv.getText().toString()) - 1;
-                tv.setText(String.valueOf(number));
-                words.get(getAdapterPosition()).setName(number+"");
+            } else if(v.getId() == rec.getId()) {
+                mAdapterCallback.onRecCallback(getAdapterPosition(),wordsFiltered,wordsFiltered.get(getAdapterPosition()).getId(),wordsFiltered.get(getAdapterPosition()).getName());
+                Toast.makeText(ctx, "REC "+wordsFiltered.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -119,13 +139,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
                 if (charString.isEmpty()) {
                     wordsFiltered = words;
-                } else {
+                }
+                else {
                     List<Word> filteredList = new ArrayList<>();
                     for (Word row : words) {
 
-                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName().startsWith(charString)) {
+                        if ( row.getName().startsWith(charString) || row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
                             filteredList.add(row);
                         }
+
                     }
 
                     wordsFiltered = filteredList;
@@ -145,6 +167,24 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             }
         };
     }
+    public void myFilter(char c)
+    {
+        List<Word> filteredList = new ArrayList<>();
+        for (Word row : words) {
+
+            if ( row.getName().startsWith(c+"")) {
+                filteredList.add(row);
+            }
+        }
+
+        wordsFiltered = filteredList;
+    }
+
+    public interface AdapterCallback {
+        void onPlayCallback( String text);
+        void onRecCallback(int adapterPosition, List<Word> wordsFiltered, int id, String text);
+    }
+
 
 }
 

@@ -53,7 +53,7 @@ public class DataBaseHelper extends SQLiteAssetHelper {
         return null;
     }
 
-    public Cursor getAllRemedies() {
+    public Cursor getAllWords() {
         String query = "SELECT  * FROM " + DataBaseHelper.WORDS_TABLE;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
