@@ -14,17 +14,21 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary"
-            app:popupTheme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/myTollbar"
+            app:popupTheme="@style/Theme.AppCompat.NoActionBar">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_gravity="end"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="end"
+                    android:padding="10dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     android:id="@+id/count_tv"
+                    android:text="15/565"
                     android:textColor="#fff"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -44,6 +48,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/circle_tv"
                 android:gravity="center"
+                android:id="@+id/frst_ltr"
                 android:textColor="@android:color/white"
                 android:text="A"
                 android:layout_centerInParent="true"/>
@@ -58,7 +63,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/word"
-                    android:textStyle="bold"
+                    android:text="Word"
+                    android:textColor="#fff"
                     android:textSize="15sp"
                     />
                 <TextView
@@ -66,6 +72,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/mng"
                     android:textStyle="italic"
+                    android:text="Word Meaning"
+                    android:textColor="#fff"
                     android:textSize="12sp"
                     />
             </LinearLayout>
@@ -99,19 +107,97 @@
                 android:layout_height="40dp"
                 android:id="@+id/tick"/>
         </LinearLayout>
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f9ff">
         <LinearLayout
             android:id="@+id/layout_second"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:background="#f2f9ff"
-            android:orientation="horizontal" />
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:orientation="vertical" >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:text="Mnemonic:"/>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:textColor="#000"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/word_name"
+                    android:textSize="15sp"
+                    android:text="Word"/>
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_width="25dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/arrow"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/word_mng"
+                    android:text="Meaning"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorPrimary"
+                android:text="synonims:"
+              />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/synm"
+                android:text="Mnemonic"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Antonyms:"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/anym"
+                android:text="Antonym"
+                />
+        </LinearLayout>
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        android:layout_centerInParent="true"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="LineScalePulseOutIndicator" />
+</RelativeLayout>
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/android_floating_action_button_fab"
+        android:id="@+id/fav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -120,11 +206,12 @@
         app:borderWidth="2dp"
         android:background="@drawable/fab_border"
         android:clickable="true"
-        android:src="@drawable/un_fav"
+        android:src="@drawable/fav"
         app:backgroundTint="#fff"
         app:elevation="4dp"
         android:scaleType="center"
         app:layout_anchor="@id/wrd_data"
         app:layout_anchorGravity="bottom|right|end" />
+
 
 </android.support.design.widget.CoordinatorLayout>
