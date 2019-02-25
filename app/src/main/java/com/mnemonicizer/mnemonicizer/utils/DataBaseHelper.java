@@ -101,10 +101,10 @@ public class DataBaseHelper extends SQLiteAssetHelper {
         return null;
     }
 
-    public int isFav(int type_id, int sub_type_id) {
+    public int isFav(int id) {
         mDB = getReadableDatabase();
-        Cursor cur = mDB.rawQuery("select * from wrds_tbls where wrd_id=? and fav_in=?",
-                new String[] {String.valueOf(type_id),  String.valueOf(1)});
+        Cursor cur = mDB.rawQuery("select * from wrds_tbl where wrd_id=? and fav_in=?",
+                new String[] {String.valueOf(id),  String.valueOf(1)});
         if (cur.getCount() != 0) {
             return 1;
         }

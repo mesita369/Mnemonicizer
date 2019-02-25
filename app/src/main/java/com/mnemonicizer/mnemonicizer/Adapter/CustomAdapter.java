@@ -1,6 +1,7 @@
 package com.mnemonicizer.mnemonicizer.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.mnemonicizer.mnemonicizer.Model.Word;
 import com.mnemonicizer.mnemonicizer.R;
+import com.mnemonicizer.mnemonicizer.UI.WordViewActivity;
 import com.mnemonicizer.mnemonicizer.utils.succesCallback;
 
 import java.util.ArrayList;
@@ -37,7 +39,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.mAdapterCallback = callback;
         this.words = words;
         this.wordsFiltered = words;
-        Toast.makeText(ctx, "C Called", Toast.LENGTH_SHORT).show();
         inflater = LayoutInflater.from(ctx);
         this.ctx = ctx;
     }
@@ -53,7 +54,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final CustomAdapter.MyViewHolder holder, final int position) {
-        Log.d("BINDED",""+position);
+
         final Word wrd = wordsFiltered.get(position);
             holder.word.setText(wrd.getName());
             holder.mng.setText(wrd.getMeaning());
@@ -64,10 +65,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     .buildRound(wordsFiltered.get(position).getName().charAt(0) + "", color1);
             holder.imageView.setImageDrawable(drawable);
             if(wordsFiltered.get(position).getCmplt_in() == 1){
-                Log.d("BINDED","Called "+position);
+
                 holder.tick.setImageDrawable(ctx.getResources().getDrawable(R.drawable.tick));
             }else{
-                Log.d("BINDED","Called---- "+position);
+
                 holder.tick.setImageDrawable(ctx.getResources().getDrawable(R.drawable.tick_red));
             }
 
@@ -110,6 +111,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             imageView = itemView.findViewById(R.id.image_view_word);
              play.setOnClickListener(this);
              rec.setOnClickListener(this);
+             word.setOnClickListener(this);
 
 
         }
@@ -125,6 +127,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             } else if(v.getId() == rec.getId()) {
                 mAdapterCallback.onRecCallback(getAdapterPosition(),wordsFiltered,wordsFiltered.get(getAdapterPosition()).getId(),wordsFiltered.get(getAdapterPosition()).getName());
                 Toast.makeText(ctx, "REC "+wordsFiltered.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
+            }else if(v.getId() == word.getId()){
+                Intent intent = new Intent(ctx,WordViewActivity.class);
+                intent.putExtra("word",wordsFiltered.get(getAdapterPosition()));
+                ctx.startActivity(intent);
             }
         }
 
