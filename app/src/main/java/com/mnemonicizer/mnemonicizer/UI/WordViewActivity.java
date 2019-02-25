@@ -47,7 +47,7 @@ Word wordObj;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_view);
-         dataBaseHelper = new DataBaseHelper(this);
+        dataBaseHelper = new DataBaseHelper(this);
         Toolbar t = (Toolbar) findViewById(R.id.toolbar);
         avi = findViewById(R.id.avi);
         avi.smoothToHide();
@@ -74,12 +74,9 @@ Word wordObj;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setFav();
         setCount();
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        play.setOnClickListener(this);
+        rec.setOnClickListener(this);
+        fav.setOnClickListener(this);
     }
 
     private void setCount() {
