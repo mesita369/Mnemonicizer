@@ -3,6 +3,8 @@
     <string name="Open">Open</string>
     <string name="Close">Close</string>
     <string-array name="Alphabets">
+
+        <item>All</item>
         <item>A</item>
         <item>B</item>
         <item>C</item>
@@ -30,4 +32,7 @@
         <item>Y</item>
         <item>Z</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

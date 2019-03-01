@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 import com.mnemonicizer.mnemonicizer.Adapter.CustomAdapter;
 import com.mnemonicizer.mnemonicizer.Adapter.MyCustomListAdapter;
 import com.mnemonicizer.mnemonicizer.Model.Word;
+import com.mnemonicizer.mnemonicizer.UI.fragments.FavFragment;
 import com.mnemonicizer.mnemonicizer.utils.DataBaseHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -43,6 +47,7 @@ import net.gotev.speech.SpeechRecognitionNotAvailable;
 import net.gotev.speech.SpeechUtil;
 import net.gotev.speech.TextToSpeechCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -122,7 +127,20 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 slect_txt.setText(alphabets.get(i));
-                customAdapter.myFilter(alphabets.get(i).charAt(0));
+                List<Word> wordList = new ArrayList<>();
+                if( i == 0){
+                    wordList = words;
+                }else{
+                    for(int k = 0;k < words.size();k++){
+                        if(i > 0){
+                           if(words.get(k).getName().charAt(0) == alphabets.get(i).toLowerCase().charAt(0)){
+                               wordList.add(words.get(k));
+                           }
+                        }
+                    }
+                }
+
+                customAdapter.setFilter(wordList);
                 alphas.setVisibility(View.GONE);
             }
         });
@@ -168,25 +186,33 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
                 {
                     case R.id.all_wrds:
                         Toast.makeText(MainActivity.this, "All Words",Toast.LENGTH_SHORT).show();
+                        displaySelectedScreen(R.id.fav_wrds);
+                        break;
                     case R.id.fav_wrds:
+                        Log.d("Killa","Called");
+                        displaySelectedScreen(R.id.fav_wrds);
                         Toast.makeText(MainActivity.this, "Favourite Words",Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.my_res:
                         Toast.makeText(MainActivity.this, "My Results",Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.prv_pol:
                         Toast.makeText(MainActivity.this, "Privacy Policy",Toast.LENGTH_SHORT).show();
                     case R.id.t_c:
                         Toast.makeText(MainActivity.this, "Terms and Conditions",Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.h_f:
                         Toast.makeText(MainActivity.this, "Help and Feedback",Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.abt:
                         Toast.makeText(MainActivity.this, "About",Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         return true;
                 }
 
 
-
-
+                return true;
             }
         });
     }
@@ -411,5 +437,31 @@ public void toggleList(View v){
         toggle.onConfigurationChanged(newConfig);
     }
 
+    private void displaySelectedScreen(int itemId) {
+Log.d("Killa","Called");
+        //creating fragment object
+        Fragment fragment = null;
 
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.fav_wrds:
+                fragment = new FavFragment();
+                break;
+            case R.id.all_wrds:
+                if(fragment != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.remove(fragment);
+                }
+        }
+
+        //replacing the fragment
+        if (fragment != null && itemId != R.id.all_wrds) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
+        drawer.closeDrawer(GravityCompat.START);
+    }
 }

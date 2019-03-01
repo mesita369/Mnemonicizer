@@ -3,7 +3,6 @@ package com.mnemonicizer.mnemonicizer.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +91,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public void setItems(List<Word> v) {
         this.wordsFiltered = v;
+        notifyDataSetChanged();
+    }
+
+    public void setFilter(List<Word> s) {
+       // Toast.makeText(ctx, ""+s.size(), Toast.LENGTH_SHORT).show();
+        wordsFiltered = new ArrayList<>();
+        wordsFiltered.addAll(s);
         notifyDataSetChanged();
     }
 

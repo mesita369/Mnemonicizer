@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mnemonicizer.mnemonicizer.MainActivity;
 import com.mnemonicizer.mnemonicizer.Model.Word;
 import com.mnemonicizer.mnemonicizer.R;
 import com.mnemonicizer.mnemonicizer.utils.DataBaseHelper;
@@ -158,7 +157,7 @@ Word wordObj;
                 Cursor c = dataBaseHelper.getAllCmplt();
                 cmpltWords = c.getCount();
                 count_tv.setText(cmpltWords+"/"+totalWords);
-            tick.setImageDrawable(getResources().getDrawable(R.drawable.tick));
+               tick.setImageDrawable(getResources().getDrawable(R.drawable.tick));
             }
 
         }else{

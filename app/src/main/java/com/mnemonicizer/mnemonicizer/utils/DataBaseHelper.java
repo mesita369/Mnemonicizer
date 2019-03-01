@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -122,11 +123,12 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     }
     public Cursor getAllCmplt(){
         mDB = getReadableDatabase();
-        Cursor cursor = mDB.query(DataBaseHelper.WORDS_TABLE, new String[] { DataBaseHelper.WORD_ID }, DataBaseHelper.CMPLT_IN + " = ?", new String[] { String.valueOf(1) }, null, null, null);
-       /* Cursor cur = mDB.rawQuery("select ID,TYPE_ID,SUB_TYPE_ID from REMEDIES where READ=?",
-                new String [] {String.valueOf(2)});*/
-        if (cursor != null) {
-            return cursor;
+        Cursor cur = mDB.rawQuery("select * from wrds_tbl where cmplt_in=?",
+                new String[] {String.valueOf(1)});
+
+        if (cur != null) {
+            Log.d("Killa",cur.toString());
+            return cur;
         }
         return null;
     }
