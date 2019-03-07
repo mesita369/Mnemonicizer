@@ -93,11 +93,11 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     }
     public Cursor getAllFavs(){
         mDB = getReadableDatabase();
-        Cursor cursor = mDB.query(DataBaseHelper.WORDS_TABLE, new String[] { DataBaseHelper.WORD_ID }, DataBaseHelper.FAV_IN + " = ?", new String[] { String.valueOf(1) }, null, null, null);
-       /* Cursor cur = mDB.rawQuery("select ID,TYPE_ID,SUB_TYPE_ID from REMEDIES where STATUS=?",
-                new String [] {String.valueOf(2)});*/
-        if (cursor != null) {
-            return cursor;
+//        Cursor cursor = mDB.query(DataBaseHelper.WORDS_TABLE, new String[] { DataBaseHelper.WORD_ID }, DataBaseHelper.FAV_IN + " = ?", new String[] { String.valueOf(1) }, null, null, null);
+       Cursor cur = mDB.rawQuery("select * from wrds_tbl where fav_in=?",
+                new String [] {String.valueOf(1)});
+        if (cur != null) {
+            return cur;
         }
         return null;
     }

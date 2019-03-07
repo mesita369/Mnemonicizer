@@ -13,9 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".UI.WordListActivity" />
         <activity
             android:name=".UI.WordViewActivity"
@@ -27,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".UI.FavActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".UI.CompleteActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

@@ -1,31 +1,23 @@
-package com.mnemonicizer.mnemonicizer;
+package com.mnemonicizer.mnemonicizer.UI;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -37,9 +29,7 @@ import android.widget.Toast;
 import com.mnemonicizer.mnemonicizer.Adapter.CustomAdapter;
 import com.mnemonicizer.mnemonicizer.Adapter.MyCustomListAdapter;
 import com.mnemonicizer.mnemonicizer.Model.Word;
-import com.mnemonicizer.mnemonicizer.UI.CompleteActivity;
-import com.mnemonicizer.mnemonicizer.UI.FavActivity;
-import com.mnemonicizer.mnemonicizer.UI.fragments.FavFragment;
+import com.mnemonicizer.mnemonicizer.R;
 import com.mnemonicizer.mnemonicizer.utils.DataBaseHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -54,10 +44,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CustomAdapter.AdapterCallback , SpeechDelegate {
+public class FavActivity extends AppCompatActivity implements CustomAdapter.AdapterCallback , SpeechDelegate {
     private static final int PERMISSIONS_REQUEST = 1;
     private RecyclerView recyclerView;
-   // private ActionMenuView amvMenu;
+    // private ActionMenuView amvMenu;
     public  List<Word> words;
     TextView slect_txt,count_tv;
     ListView alphas;
@@ -67,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
     private String textCheck;
     private AVLoadingIndicatorView avi;
     private MyCustomListAdapter myAlphaAdapter;
-    private DrawerLayout dl;
-    private ActionBarDrawerToggle toggle;
     private NavigationView nv;
     DataBaseHelper helper;
     private int word_id;
@@ -81,50 +69,31 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        dl = (DrawerLayout)findViewById(R.id.activity_main);
+        setContentView(R.layout.activity_fav);
         count_tv = findViewById(R.id.count_tv);
         Toolbar t = (Toolbar) findViewById(R.id.toolbar);
-        toggle = new ActionBarDrawerToggle(this, dl,t,R.string.Open, R.string.Close);
-
-        toggle.setHomeAsUpIndicator(R.drawable.mnu);
-        t.setNavigationIcon(R.drawable.mnu);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        dl.addDrawerListener(toggle);
-        toggle.syncState();
-
         alphas = findViewById(R.id.alpha_list);
         slect_txt = findViewById(R.id.slct_aplha);
         final List<String> alphabets = Arrays.asList(getResources().getStringArray(R.array.Alphabets));
         myAlphaAdapter = new MyCustomListAdapter(this, alphabets);
         alphas.setAdapter(myAlphaAdapter);
-
-        //amvMenu = (ActionMenuView) t.findViewById(R.id.amvMenu);
         avi = findViewById(R.id.avi);
         avi.smoothToHide();
-//        amvMenu.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem menuItem) {
-//                return onOptionsItemSelected(menuItem);
-//            }
-//        });
-
         setSupportActionBar(t);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         helper = new DataBaseHelper(this);
-        Cursor cursor = helper.getAllWords();
-        words = Word.fromCursor(cursor);
+        Cursor cursor = helper.getAllFavs();
+        if(cursor.getCount() != 0) {
+            words = Word.fromCursor(cursor);
+        }else {
+            words = new ArrayList<>();
+        }
         Cursor c =helper.getAllCmplt();
         cmpltWords = c.getCount();
-        totalWords = words.size();
+        totalWords = helper.getAllWords().getCount();
         count_tv.setText(cmpltWords+"/"+totalWords);
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-
-
-        //words = getModel();
         customAdapter = new CustomAdapter(this,words,this);
         alphas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
                 }else{
                     for(int k = 0;k < words.size();k++){
                         if(i > 0){
-                           if(words.get(k).getName().charAt(0) == alphabets.get(i).toLowerCase().charAt(0)){
-                               wordList.add(words.get(k));
-                           }
+                            if(words.get(k).getName().charAt(0) == alphabets.get(i).toLowerCase().charAt(0)){
+                                wordList.add(words.get(k));
+                            }
                         }
                     }
                 }
@@ -178,55 +147,12 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
                 return false;
             }
         });
-
-        nv = (NavigationView)findViewById(R.id.nv);
-        nv.setItemIconTintList(null);
-        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Intent intent;
-                switch(id)
-                {
-                    case R.id.all_wrds:
-                        dl.closeDrawers();
-                        break;
-                    case R.id.fav_wrds:
-                        dl.closeDrawers();
-                         intent = new Intent(MainActivity.this, FavActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.my_res:
-                        dl.closeDrawers();
-                         intent = new Intent(MainActivity.this, CompleteActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.prv_pol:
-                        Toast.makeText(MainActivity.this, "Privacy Policy",Toast.LENGTH_SHORT).show();
-                    case R.id.t_c:
-                        Toast.makeText(MainActivity.this, "Terms and Conditions",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.h_f:
-                        Toast.makeText(MainActivity.this, "Help and Feedback",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.abt:
-                        Toast.makeText(MainActivity.this, "About",Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        return true;
-                }
-
-
-                return true;
-            }
-        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // prevent memory leaks when activity is destroyed
-        Speech.init(this);
         Speech.getInstance().shutdown();
     }
 
@@ -314,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             Speech.getInstance().stopTextToSpeech();
-            Speech.getInstance().startListening(MainActivity.this);
+            Speech.getInstance().startListening(FavActivity.this);
 
         } catch (SpeechRecognitionNotAvailable exc) {
             avi.smoothToHide();
@@ -338,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
                 onRecordAudioPermissionGranted();
             } else {
                 // permission denied, boo!
-                Toast.makeText(MainActivity.this,"Permissino Granted", Toast.LENGTH_LONG).show();
+                Toast.makeText(FavActivity.this,"Permissino Granted", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -362,20 +288,20 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
     public void onSpeechResult(String result) {
         avi.smoothToHide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-     if(textCheck.trim().equalsIgnoreCase(result)){
-         int k = helper.setComplete(word_id);
-         if(k != 0){
-              Cursor c = helper.getAllCmplt();
-              cmpltWords = c.getCount();
-             count_tv.setText(cmpltWords+"/"+totalWords);
-             _words.get(adptPosition).setCmplt_in(1);
-             customAdapter.setItems(_words);
+        if(textCheck.trim().equalsIgnoreCase(result)){
+            int k = helper.setComplete(word_id);
+            if(k != 0){
+                Cursor c = helper.getAllCmplt();
+                cmpltWords = c.getCount();
+                count_tv.setText(cmpltWords+"/"+totalWords);
+                _words.get(adptPosition).setCmplt_in(1);
+                customAdapter.setItems(_words);
 
-         }
+            }
 
-     }else{
-         Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
-     }
+        }else{
+            Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showSpeechNotSupportedDialog() {
@@ -384,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        SpeechUtil.redirectUserToGoogleAppOnPlayStore(MainActivity.this);
+                        SpeechUtil.redirectUserToGoogleAppOnPlayStore(FavActivity.this);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -413,61 +339,18 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
                 })
                 .show();
     }
-public void toggleList(View v){
+    public void toggleList(View v){
         if(alphas.getVisibility() == View.VISIBLE){
             alphas.setVisibility(View.GONE);
         }else{
             alphas.setVisibility(View.VISIBLE);
         }
-}
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(toggle.onOptionsItemSelected(item))
-            return true;
-
-        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        toggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
 
-    private void displaySelectedScreen(int itemId) {
-Log.d("Killa","Called");
-        //creating fragment object
-        Fragment fragment = null;
 
-        //initializing the fragment object which is selected
-        switch (itemId) {
-            case R.id.fav_wrds:
-                fragment = new FavFragment();
-                break;
-            case R.id.all_wrds:
-                if(fragment != null) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.remove(fragment);
-                }
-        }
 
-        //replacing the fragment
-        if (fragment != null && itemId != R.id.all_wrds) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
-            ft.commit();
-        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main);
-        drawer.closeDrawer(GravityCompat.START);
-    }
+
 }

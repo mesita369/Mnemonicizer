@@ -152,7 +152,7 @@ Word wordObj;
         avi.smoothToHide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         if(wordObj.getName().trim().equalsIgnoreCase(result)){
-            int k = dataBaseHelper.setComplete(wordObj.getCmplt_in());
+            int k = dataBaseHelper.setComplete(wordObj.getId());
             if(k != 0){
                 Cursor c = dataBaseHelper.getAllCmplt();
                 cmpltWords = c.getCount();
