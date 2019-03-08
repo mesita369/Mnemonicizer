@@ -10,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,6 +107,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         protected ImageButton play,rec, tick;
         private TextView word, mng;
         private ImageView imageView;
+        private LinearLayout wrd_ll;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -114,10 +116,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             tick = itemView.findViewById(R.id.tick);
             word = (TextView) itemView.findViewById(R.id.word);
             mng = (TextView) itemView.findViewById(R.id.mng);
+            wrd_ll = itemView.findViewById(R.id.wrd_ll);
             imageView = itemView.findViewById(R.id.image_view_word);
              play.setOnClickListener(this);
              rec.setOnClickListener(this);
              word.setOnClickListener(this);
+             mng.setOnClickListener(this);
+             wrd_ll.setOnClickListener(this);
+
 
 
         }
@@ -133,7 +139,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             } else if(v.getId() == rec.getId()) {
                 mAdapterCallback.onRecCallback(getAdapterPosition(),wordsFiltered,wordsFiltered.get(getAdapterPosition()).getId(),wordsFiltered.get(getAdapterPosition()).getName());
                 Toast.makeText(ctx, "REC "+wordsFiltered.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
-            }else if(v.getId() == word.getId()){
+            }else if(v.getId() == word.getId() || v.getId() == mng.getId() || v.getId() == wrd_ll.getId()){
                 Intent intent = new Intent(ctx,WordViewActivity.class);
                 intent.putExtra("word",wordsFiltered.get(getAdapterPosition()));
                 ctx.startActivity(intent);

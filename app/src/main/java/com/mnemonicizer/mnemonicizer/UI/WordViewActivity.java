@@ -72,6 +72,7 @@ Word wordObj;
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setFav();
+        setCmpltWords();
         setCount();
         play.setOnClickListener(this);
         rec.setOnClickListener(this);
@@ -91,6 +92,13 @@ Word wordObj;
             fav.setImageDrawable(getResources().getDrawable(R.drawable.fav_in));
         }else{
             fav.setImageDrawable(getResources().getDrawable(R.drawable.fav));
+        }
+    }
+    private void setCmpltWords() {
+        if(dataBaseHelper.isCmplt(wordObj.getId()) == 1){
+            tick.setImageDrawable(getResources().getDrawable(R.drawable.tick));
+        }else{
+            tick.setImageDrawable(getResources().getDrawable(R.drawable.tick_red));
         }
     }
 
