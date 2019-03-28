@@ -18,13 +18,17 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     private static final int DB_VERSION = 1;
 
     //Table REMEDIE_TYPE
-    public static final String WORDS_TABLE = "wrds_tbl";
+    public static final String WORDS_TABLE = "complete500";
 
     //Table  MNEMONICIZER
     public static final String WORD_ID = "wrd_id";
-    public static final String WORD_NAME = "wrd_name";
+    public static final String WORD_NAME = "wrd_nm";
     public static final String MNEMONIC = "mnemonic";
     public static final String MEANING = "meaning";
+    public static final String SYNONYM = "synonyms";
+    public static final String ANTONYM = "antonyms";
+    public static final String EX1 = "ex1";
+    public static final String EX2 = "ex2";
     public static final String FAV_IN = "fav_in";
     public static final String CMPLT_IN = "cmplt_in";
 
@@ -94,7 +98,7 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     public Cursor getAllFavs(){
         mDB = getReadableDatabase();
 //        Cursor cursor = mDB.query(DataBaseHelper.WORDS_TABLE, new String[] { DataBaseHelper.WORD_ID }, DataBaseHelper.FAV_IN + " = ?", new String[] { String.valueOf(1) }, null, null, null);
-       Cursor cur = mDB.rawQuery("select * from wrds_tbl where fav_in=?",
+       Cursor cur = mDB.rawQuery("select * from complete500 where fav_in=?",
                 new String [] {String.valueOf(1)});
         if (cur != null) {
             return cur;
@@ -104,7 +108,7 @@ public class DataBaseHelper extends SQLiteAssetHelper {
 
     public int isFav(int id) {
         mDB = getReadableDatabase();
-        Cursor cur = mDB.rawQuery("select * from wrds_tbl where wrd_id=? and fav_in=?",
+        Cursor cur = mDB.rawQuery("select * from complete500 where wrd_id=? and fav_in=?",
                 new String[] {String.valueOf(id),  String.valueOf(1)});
         if (cur.getCount() != 0) {
             return 1;
@@ -123,7 +127,7 @@ public class DataBaseHelper extends SQLiteAssetHelper {
     }
     public Cursor getAllCmplt(){
         mDB = getReadableDatabase();
-        Cursor cur = mDB.rawQuery("select * from wrds_tbl where cmplt_in=?",
+        Cursor cur = mDB.rawQuery("select * from complete500 where cmplt_in=?",
                 new String[] {String.valueOf(1)});
 
         if (cur != null) {
@@ -135,7 +139,7 @@ public class DataBaseHelper extends SQLiteAssetHelper {
 
     public int isCmplt(int id) {
         mDB = getReadableDatabase();
-        Cursor cur = mDB.rawQuery("select * from wrds_tbl where wrd_id=? and cmplt_in=?",
+        Cursor cur = mDB.rawQuery("select * from complete500 where wrd_id=? and cmplt_in=?",
                 new String[] {String.valueOf(id), String.valueOf(1)});
         if (cur.getCount() != 0) {
             return 1;

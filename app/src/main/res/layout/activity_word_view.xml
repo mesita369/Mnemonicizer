@@ -182,6 +182,37 @@
                 android:id="@+id/anym"
                 android:text="Antonym"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Example:"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ex1"
+                android:text="Example"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Example:"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ex2"
+                android:text="Example"
+                />
+
         </LinearLayout>
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"

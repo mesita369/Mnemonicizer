@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.Ada
 
         helper = new DataBaseHelper(this);
         Cursor cursor = helper.getAllWords();
+        Log.d("DATACURSOR",cursor.getCount()+"");
         words = Word.fromCursor(cursor);
         Cursor c =helper.getAllCmplt();
         cmpltWords = c.getCount();
